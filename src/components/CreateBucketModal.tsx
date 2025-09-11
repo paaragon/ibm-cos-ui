@@ -25,42 +25,42 @@ export function CreateBucketModal({ onSave, onCancel }: CreateBucketModalProps) 
     if (!name.trim()) {
       return 'Bucket name is required';
     }
-    
+
     if (name.length < 3 || name.length > 63) {
       return 'Bucket name must be between 3 and 63 characters';
     }
-    
+
     if (!/^[a-z0-9.-]+$/.test(name)) {
       return 'Bucket name can only contain lowercase letters, numbers, dots, and hyphens';
     }
-    
+
     if (name.startsWith('.') || name.startsWith('-') || name.endsWith('.') || name.endsWith('-')) {
       return 'Bucket name cannot start or end with dots or hyphens';
     }
-    
+
     if (name.includes('..')) {
       return 'Bucket name cannot contain consecutive dots';
     }
-    
+
     return '';
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationError = validateBucketName(bucketName);
     if (validationError) {
       setError(validationError);
       return;
     }
-    
+
     onSave(bucketName.trim(), region);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setBucketName(value);
-    
+
     if (error) {
       const validationError = validateBucketName(value);
       setError(validationError);
@@ -72,10 +72,7 @@ export function CreateBucketModal({ onSave, onCancel }: CreateBucketModalProps) 
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Create New Bucket</h3>
-          <button
-            onClick={onCancel}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <button onClick={onCancel} className="p-1 hover:bg-gray-100 rounded">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -94,11 +91,10 @@ export function CreateBucketModal({ onSave, onCancel }: CreateBucketModalProps) 
               placeholder="my-bucket-name"
               autoFocus
             />
-            {error && (
-              <p className="mt-1 text-sm text-red-600">{error}</p>
-            )}
+            {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
             <p className="mt-1 text-xs text-gray-500">
-              Must be globally unique, 3-63 characters, lowercase letters, numbers, dots, and hyphens only
+              Must be globally unique, 3-63 characters, lowercase letters, numbers, dots, and
+              hyphens only
             </p>
           </div>
 
@@ -112,7 +108,7 @@ export function CreateBucketModal({ onSave, onCancel }: CreateBucketModalProps) 
               onChange={(e) => setRegion(e.target.value)}
               className="input"
             >
-              {regions.map(r => (
+              {regions.map((r) => (
                 <option key={r.value} value={r.value}>
                   {r.label}
                 </option>
@@ -124,14 +120,14 @@ export function CreateBucketModal({ onSave, onCancel }: CreateBucketModalProps) 
           </div>
 
           <div className="flex gap-3 pt-4">
-            <button type="submit" className="btn-primary flex-1" disabled={!!error || !bucketName.trim()}>
+            <button
+              type="submit"
+              className="btn-primary flex-1"
+              disabled={!!error || !bucketName.trim()}
+            >
               Create Bucket
             </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="btn-secondary flex-1"
-            >
+            <button type="button" onClick={onCancel} className="btn-secondary flex-1">
               Cancel
             </button>
           </div>
