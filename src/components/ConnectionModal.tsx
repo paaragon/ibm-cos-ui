@@ -69,23 +69,22 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       onSave(formData);
     }
   };
 
-  const handleChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  };
+  const handleChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+      setFormData((prev) => ({ ...prev, [field]: value }));
+
+      // Clear error when user starts typing
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: '' }));
+      }
+    };
 
   return (
     <div className="modal-backdrop" onClick={onCancel}>
@@ -94,10 +93,7 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
           <h3 className="text-lg font-semibold">
             {connection ? 'Edit Connection' : 'New Connection'}
           </h3>
-          <button
-            onClick={onCancel}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <button onClick={onCancel} className="p-1 hover:bg-gray-100 rounded">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -115,9 +111,7 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
               className={errors.name ? 'input-error' : 'input'}
               placeholder="My IBM COS Connection"
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-            )}
+            {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
           </div>
 
           <div>
@@ -132,12 +126,8 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
               className={errors.endpoint ? 'input-error' : 'input'}
               placeholder="https://s3.us-south.cloud-object-storage.appdomain.cloud"
             />
-            {errors.endpoint && (
-              <p className="mt-1 text-sm text-red-600">{errors.endpoint}</p>
-            )}
-            <p className="mt-1 text-xs text-gray-500">
-              Your IBM COS service endpoint URL
-            </p>
+            {errors.endpoint && <p className="mt-1 text-sm text-red-600">{errors.endpoint}</p>}
+            <p className="mt-1 text-xs text-gray-500">Your IBM COS service endpoint URL</p>
           </div>
 
           <div>
@@ -152,9 +142,7 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
               className={errors.apiKey ? 'input-error' : 'input'}
               placeholder="Your IBM Cloud API Key"
             />
-            {errors.apiKey && (
-              <p className="mt-1 text-sm text-red-600">{errors.apiKey}</p>
-            )}
+            {errors.apiKey && <p className="mt-1 text-sm text-red-600">{errors.apiKey}</p>}
           </div>
 
           <div>
@@ -169,12 +157,8 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
               className={errors.instanceId ? 'input-error' : 'input'}
               placeholder="crn:v1:bluemix:public:cloud-object-storage:..."
             />
-            {errors.instanceId && (
-              <p className="mt-1 text-sm text-red-600">{errors.instanceId}</p>
-            )}
-            <p className="mt-1 text-xs text-gray-500">
-              Your COS service instance CRN
-            </p>
+            {errors.instanceId && <p className="mt-1 text-sm text-red-600">{errors.instanceId}</p>}
+            <p className="mt-1 text-xs text-gray-500">Your COS service instance CRN</p>
           </div>
 
           <div className="flex items-center">
@@ -194,11 +178,7 @@ export function ConnectionModal({ connection, onSave, onCancel }: ConnectionModa
             <button type="submit" className="btn-primary flex-1">
               {connection ? 'Update' : 'Create'} Connection
             </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="btn-secondary flex-1"
-            >
+            <button type="button" onClick={onCancel} className="btn-secondary flex-1">
               Cancel
             </button>
           </div>

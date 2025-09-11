@@ -56,7 +56,7 @@ export function App() {
         onEditConnection={handleEditConnection}
         onDeleteConnection={handleDeleteConnection}
       />
-      
+
       <MainContent
         connection={activeConnection}
         selectedBucket={selectedBucket}

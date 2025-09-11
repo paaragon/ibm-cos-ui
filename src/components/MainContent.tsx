@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Trash2, 
-  Search, 
-  Upload, 
-  RefreshCw, 
+import {
+  Plus,
+  Trash2,
+  Search,
+  Upload,
+  RefreshCw,
   Download,
   Edit3,
   Folder,
   File,
   ArrowLeft,
-  Database
+  Database,
 } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 import { CreateBucketModal } from './CreateBucketModal';
@@ -33,8 +33,11 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
   const [isLoading, setIsLoading] = useState(false);
   const [isCreateBucketModalOpen, setIsCreateBucketModalOpen] = useState(false);
   const [renameObject, setRenameObject] = useState<ObjectItem | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<{ type: 'bucket' | 'object'; item: Bucket | ObjectItem } | null>(null);
-  
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: 'bucket' | 'object';
+    item: Bucket | ObjectItem;
+  } | null>(null);
+
   const { showSuccess, showError, showLoading, dismiss } = useNotifications();
 
   // Load buckets when connection changes
@@ -85,13 +88,13 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
 
     setIsLoading(true);
     const effectivePrefix = searchQuery || prefix;
-    
+
     try {
       const result = await window.cos.listObjects(connection, selectedBucket.name, {
         prefix: effectivePrefix,
         maxKeys: 1000,
       });
-      
+
       if (result.ok && result.data) {
         setObjects(result.data.objects);
         setCommonPrefixes(result.data.commonPrefixes);
@@ -159,10 +162,15 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
       for (const filePath of filePaths) {
         const fileName = filePath.split('/').pop() || 'unknown';
         const key = currentPrefix + fileName;
-        
+
         const loadingToast = showLoading(`Uploading ${fileName}...`);
         try {
-          const result = await window.cos.uploadObject(connection, selectedBucket.name, key, filePath);
+          const result = await window.cos.uploadObject(
+            connection,
+            selectedBucket.name,
+            key,
+            filePath
+          );
           if (result.ok) {
             showSuccess(`${fileName} uploaded successfully`);
           } else {
@@ -172,7 +180,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
           dismiss(loadingToast);
         }
       }
-      
+
       await loadObjects();
     } catch (error) {
       showError('Failed to upload files');
@@ -190,12 +198,12 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
       const loadingToast = showLoading(`Downloading ${object.key}...`);
       try {
         const result = await window.cos.downloadObject(
-          connection, 
-          selectedBucket.name, 
-          object.key, 
+          connection,
+          selectedBucket.name,
+          object.key,
           destinationPath
         );
-        
+
         if (result.ok) {
           showSuccess('File downloaded successfully');
         } else {
@@ -216,12 +224,12 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
     const loadingToast = showLoading('Renaming object...');
     try {
       const result = await window.cos.renameObject(
-        connection, 
-        selectedBucket.name, 
-        object.key, 
+        connection,
+        selectedBucket.name,
+        object.key,
         newKey
       );
-      
+
       if (result.ok) {
         showSuccess('Object renamed successfully');
         await loadObjects();
@@ -295,7 +303,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
           <h2 className="text-xl font-semibold text-gray-900">
             {selectedBucket ? `Bucket: ${selectedBucket.name}` : 'Buckets'}
           </h2>
-          
+
           <div className="flex items-center gap-2">
             <button
               onClick={loadBuckets}
@@ -305,17 +313,14 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
-            
+
             {!selectedBucket && (
-              <button
-                onClick={() => setIsCreateBucketModalOpen(true)}
-                className="btn-primary"
-              >
+              <button onClick={() => setIsCreateBucketModalOpen(true)} className="btn-primary">
                 <Plus className="w-4 h-4 mr-2" />
                 New Bucket
               </button>
             )}
-            
+
             {selectedBucket && (
               <button onClick={handleUpload} className="btn-primary">
                 <Upload className="w-4 h-4 mr-2" />
@@ -337,30 +342,30 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
                 Back to Buckets
               </button>
             </div>
-            
+
             {currentPrefix && (
               <div className="flex items-center text-sm text-gray-600">
                 <span>Path:</span>
-                <button
-                  onClick={() => navigateToPrefix('')}
-                  className="ml-2 hover:text-gray-900"
-                >
+                <button onClick={() => navigateToPrefix('')} className="ml-2 hover:text-gray-900">
                   {selectedBucket.name}
                 </button>
-                {currentPrefix.split('/').filter(Boolean).map((part, index, arr) => {
-                  const partialPath = arr.slice(0, index + 1).join('/') + '/';
-                  return (
-                    <span key={index}>
-                      <span className="mx-1">/</span>
-                      <button
-                        onClick={() => navigateToPrefix(partialPath)}
-                        className="hover:text-gray-900"
-                      >
-                        {part}
-                      </button>
-                    </span>
-                  );
-                })}
+                {currentPrefix
+                  .split('/')
+                  .filter(Boolean)
+                  .map((part, index, arr) => {
+                    const partialPath = arr.slice(0, index + 1).join('/') + '/';
+                    return (
+                      <span key={index}>
+                        <span className="mx-1">/</span>
+                        <button
+                          onClick={() => navigateToPrefix(partialPath)}
+                          className="hover:text-gray-900"
+                        >
+                          {part}
+                        </button>
+                      </span>
+                    );
+                  })}
               </div>
             )}
 
@@ -385,7 +390,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
         {!selectedBucket ? (
           // Buckets list
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {buckets.map(bucket => (
+            {buckets.map((bucket) => (
               <div
                 key={bucket.name}
                 className="bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors cursor-pointer group"
@@ -395,9 +400,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center mb-2">
                       <Database className="w-5 h-5 text-blue-500 mr-2" />
-                      <h3 className="text-lg font-medium text-gray-900 truncate">
-                        {bucket.name}
-                      </h3>
+                      <h3 className="text-lg font-medium text-gray-900 truncate">{bucket.name}</h3>
                     </div>
                     {bucket.creationDate && (
                       <p className="text-sm text-gray-500">
@@ -405,7 +408,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
                       </p>
                     )}
                   </div>
-                  
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -419,16 +422,13 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
                 </div>
               </div>
             ))}
-            
+
             {buckets.length === 0 && !isLoading && (
               <div className="col-span-full text-center py-12">
                 <Database className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-600 mb-2">No Buckets Found</h3>
                 <p className="text-gray-500 mb-4">Create your first bucket to get started.</p>
-                <button
-                  onClick={() => setIsCreateBucketModalOpen(true)}
-                  className="btn-primary"
-                >
+                <button onClick={() => setIsCreateBucketModalOpen(true)} className="btn-primary">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Bucket
                 </button>
@@ -439,7 +439,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
           // Objects list
           <div>
             {/* Folders (common prefixes) */}
-            {commonPrefixes.map(prefix => (
+            {commonPrefixes.map((prefix) => (
               <div
                 key={prefix}
                 className="flex items-center justify-between p-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer"
@@ -455,7 +455,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
             ))}
 
             {/* Objects */}
-            {objects.map(object => (
+            {objects.map((object) => (
               <div
                 key={object.key}
                 className="flex items-center justify-between p-3 hover:bg-gray-50 border-b border-gray-100"
@@ -463,15 +463,14 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
                 <div className="flex items-center flex-1 min-w-0">
                   <File className="w-5 h-5 text-gray-400 mr-3" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">
-                      {object.key.replace(currentPrefix, '')}
-                    </p>
+                    <p className="font-medium truncate">{object.key.replace(currentPrefix, '')}</p>
                     <p className="text-sm text-gray-500">
-                      {formatFileSize(object.size)} • {new Date(object.lastModified).toLocaleString()}
+                      {formatFileSize(object.size)} •{' '}
+                      {new Date(object.lastModified).toLocaleString()}
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleDownload(object)}
@@ -537,8 +536,8 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
         <ConfirmModal
           title={`Delete ${deleteTarget.type}`}
           message={`Are you sure you want to delete "${
-            deleteTarget.type === 'bucket' 
-              ? (deleteTarget.item as Bucket).name 
+            deleteTarget.type === 'bucket'
+              ? (deleteTarget.item as Bucket).name
               : (deleteTarget.item as ObjectItem).key
           }"? This action cannot be undone.`}
           confirmText="Delete"

@@ -14,9 +14,9 @@ export function useConnections() {
       try {
         const parsed = JSON.parse(savedConnections) as Connection[];
         setConnections(parsed);
-        
+
         // Set the first default connection as active
-        const defaultConn = parsed.find(conn => conn.isDefault) || parsed[0];
+        const defaultConn = parsed.find((conn) => conn.isDefault) || parsed[0];
         if (defaultConn) {
           setActiveConnection(defaultConn);
         }
@@ -42,7 +42,7 @@ export function useConnections() {
     const isFirstConnection = connections.length === 0;
     if (isFirstConnection || connection.isDefault) {
       // Remove default from other connections
-      const updatedConnections = connections.map(conn => ({ ...conn, isDefault: false }));
+      const updatedConnections = connections.map((conn) => ({ ...conn, isDefault: false }));
       newConnection.isDefault = true;
       saveConnections([...updatedConnections, newConnection]);
       setActiveConnection(newConnection);
@@ -54,23 +54,23 @@ export function useConnections() {
   };
 
   const updateConnection = (id: string, updates: Partial<Connection>) => {
-    const updatedConnections = connections.map(conn => {
+    const updatedConnections = connections.map((conn) => {
       if (conn.id === id) {
         const updated = { ...conn, ...updates };
-        
+
         // If making this connection default, remove default from others
         if (updates.isDefault) {
           setActiveConnection(updated);
         }
-        
+
         return updated;
       }
-      
+
       // Remove default from other connections if we're setting a new default
       if (updates.isDefault) {
         return { ...conn, isDefault: false };
       }
-      
+
       return conn;
     });
 
@@ -78,12 +78,13 @@ export function useConnections() {
   };
 
   const deleteConnection = (id: string) => {
-    const updatedConnections = connections.filter(conn => conn.id !== id);
+    const updatedConnections = connections.filter((conn) => conn.id !== id);
     saveConnections(updatedConnections);
 
     // If we deleted the active connection, select a new one
     if (activeConnection?.id === id) {
-      const newActive = updatedConnections.find(conn => conn.isDefault) || updatedConnections[0] || null;
+      const newActive =
+        updatedConnections.find((conn) => conn.isDefault) || updatedConnections[0] || null;
       setActiveConnection(newActive);
     }
   };

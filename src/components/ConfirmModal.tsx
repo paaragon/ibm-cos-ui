@@ -25,10 +25,7 @@ export function ConfirmModal({
             <AlertTriangle className="w-5 h-5 text-amber-500 mr-2" />
             <h3 className="text-lg font-semibold">{title}</h3>
           </div>
-          <button
-            onClick={onCancel}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
+          <button onClick={onCancel} className="p-1 hover:bg-gray-100 rounded">
             <X className="w-5 h-5" />
           </button>
         </div>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Settings, 
-  Trash2, 
-  Database, 
-  ChevronRight, 
+import {
+  Plus,
+  Settings,
+  Trash2,
+  Database,
+  ChevronRight,
   ChevronDown,
-  RefreshCw 
+  RefreshCw,
 } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 import type { Connection, Bucket } from '../types';
@@ -41,7 +41,7 @@ export function Sidebar({
   useEffect(() => {
     if (activeConnection) {
       loadBuckets();
-      setExpandedConnections(prev => new Set([...prev, activeConnection.id]));
+      setExpandedConnections((prev) => new Set([...prev, activeConnection.id]));
     } else {
       setBuckets([]);
     }
@@ -122,17 +122,17 @@ export function Sidebar({
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-sm font-medium text-gray-700">Connections</h2>
           </div>
-          
+
           {connections.length === 0 ? (
             <p className="text-sm text-gray-500">No connections configured</p>
           ) : (
             <div className="space-y-1">
-              {connections.map(connection => (
+              {connections.map((connection) => (
                 <div key={connection.id} className="group">
                   <div
                     className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
-                      activeConnection?.id === connection.id 
-                        ? 'bg-primary-50 text-primary-700' 
+                      activeConnection?.id === connection.id
+                        ? 'bg-primary-50 text-primary-700'
                         : 'hover:bg-gray-100'
                     }`}
                     onClick={() => handleConnectionSelect(connection)}
@@ -151,14 +151,12 @@ export function Sidebar({
                           <ChevronRight className="w-3 h-3" />
                         )}
                       </button>
-                      
+
                       <Database className="w-4 h-4 ml-2 mr-2 flex-shrink-0" />
-                      
+
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium truncate">{connection.name}</p>
-                        {connection.isDefault && (
-                          <p className="text-xs text-gray-500">Default</p>
-                        )}
+                        {connection.isDefault && <p className="text-xs text-gray-500">Default</p>}
                       </div>
                     </div>
 
@@ -181,48 +179,51 @@ export function Sidebar({
                   </div>
 
                   {/* Buckets list */}
-                  {expandedConnections.has(connection.id) && activeConnection?.id === connection.id && (
-                    <div className="ml-6 mt-2">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-gray-600">Buckets</span>
-                        <button
-                          onClick={loadBuckets}
-                          disabled={isLoadingBuckets}
-                          className="p-1 hover:bg-gray-200 rounded disabled:opacity-50"
-                          title="Refresh buckets"
-                        >
-                          <RefreshCw className={`w-3 h-3 ${isLoadingBuckets ? 'animate-spin' : ''}`} />
-                        </button>
-                      </div>
-                      
-                      {isLoadingBuckets ? (
-                        <div className="text-xs text-gray-500 py-2">Loading...</div>
-                      ) : buckets.length === 0 ? (
-                        <div className="text-xs text-gray-500 py-2">No buckets found</div>
-                      ) : (
-                        <div className="space-y-1">
-                          {buckets.map(bucket => (
-                            <button
-                              key={bucket.name}
-                              onClick={() => handleBucketSelect(bucket)}
-                              className={`block w-full text-left p-2 text-xs rounded transition-colors ${
-                                selectedBucket?.name === bucket.name
-                                  ? 'bg-primary-100 text-primary-800'
-                                  : 'hover:bg-gray-100'
-                              }`}
-                            >
-                              <div className="truncate">{bucket.name}</div>
-                              {bucket.creationDate && (
-                                <div className="text-gray-500 mt-0.5">
-                                  {new Date(bucket.creationDate).toLocaleDateString()}
-                                </div>
-                              )}
-                            </button>
-                          ))}
+                  {expandedConnections.has(connection.id) &&
+                    activeConnection?.id === connection.id && (
+                      <div className="ml-6 mt-2">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-medium text-gray-600">Buckets</span>
+                          <button
+                            onClick={loadBuckets}
+                            disabled={isLoadingBuckets}
+                            className="p-1 hover:bg-gray-200 rounded disabled:opacity-50"
+                            title="Refresh buckets"
+                          >
+                            <RefreshCw
+                              className={`w-3 h-3 ${isLoadingBuckets ? 'animate-spin' : ''}`}
+                            />
+                          </button>
                         </div>
-                      )}
-                    </div>
-                  )}
+
+                        {isLoadingBuckets ? (
+                          <div className="text-xs text-gray-500 py-2">Loading...</div>
+                        ) : buckets.length === 0 ? (
+                          <div className="text-xs text-gray-500 py-2">No buckets found</div>
+                        ) : (
+                          <div className="space-y-1">
+                            {buckets.map((bucket) => (
+                              <button
+                                key={bucket.name}
+                                onClick={() => handleBucketSelect(bucket)}
+                                className={`block w-full text-left p-2 text-xs rounded transition-colors ${
+                                  selectedBucket?.name === bucket.name
+                                    ? 'bg-primary-100 text-primary-800'
+                                    : 'hover:bg-gray-100'
+                                }`}
+                              >
+                                <div className="truncate">{bucket.name}</div>
+                                {bucket.creationDate && (
+                                  <div className="text-gray-500 mt-0.5">
+                                    {new Date(bucket.creationDate).toLocaleDateString()}
+                                  </div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
               ))}
             </div>
