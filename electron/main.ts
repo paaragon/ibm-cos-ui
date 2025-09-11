@@ -38,6 +38,7 @@ class ElectronApp {
       height: 800,
       minWidth: 800,
       minHeight: 600,
+      icon: join(__dirname, '../../assets/icons/icon-256.png'),
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
