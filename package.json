@@ -5,7 +5,7 @@
   "main": "dist-electron/electron/main.js",
   "homepage": "./",
   "scripts": {
-    "dev": "concurrently \"npm run build:electron && electron .\" \"npm run dev:vite\"",
+    "dev": "concurrently \"npm run build:electron && NODE_ENV=development electron .\" \"npm run dev:vite\"",
     "dev:vite": "vite",
     "build": "npm run build:electron && npm run build:renderer && electron-builder",
     "build:renderer": "vite build",
