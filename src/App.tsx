@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/Sidebar';
 import { MainContent } from './components/MainContent';

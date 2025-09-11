@@ -9,13 +9,14 @@ import {
   Edit3,
   Folder,
   File,
-  ArrowLeft
+  ArrowLeft,
+  Database
 } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 import { CreateBucketModal } from './CreateBucketModal';
 import { RenameModal } from './RenameModal';
 import { ConfirmModal } from './ConfirmModal';
-import type { Connection, Bucket, ObjectItem, ListObjectsResult } from '../types';
+import type { Connection, Bucket, ObjectItem } from '../types';
 
 interface MainContentProps {
   connection: Connection | null;
@@ -45,7 +46,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
       setObjects([]);
       setCommonPrefixes([]);
     }
-  }, [connection]);
+  }, [connection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load objects when bucket changes
   useEffect(() => {
@@ -58,7 +59,7 @@ export function MainContent({ connection, selectedBucket, onBucketChange }: Main
       setCommonPrefixes([]);
       setCurrentPrefix('');
     }
-  }, [selectedBucket, connection]);
+  }, [selectedBucket, connection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadBuckets = async () => {
     if (!connection) return;

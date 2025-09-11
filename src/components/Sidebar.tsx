@@ -45,7 +45,7 @@ export function Sidebar({
     } else {
       setBuckets([]);
     }
-  }, [activeConnection]);
+  }, [activeConnection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadBuckets = async () => {
     if (!activeConnection) return;
