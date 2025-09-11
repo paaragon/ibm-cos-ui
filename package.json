@@ -2,10 +2,10 @@
   "name": "ibm-cos-ui",
   "version": "1.0.0",
   "description": "Desktop app to manage IBM Cloud Object Storage",
-  "main": "dist-electron/main.js",
+  "main": "dist-electron/electron/main.js",
   "homepage": "./",
   "scripts": {
-    "dev": "concurrently \"npm run build:electron && electron .\" \"npm run dev:vite\"",
+    "dev": "concurrently \"npm run build:electron && NODE_ENV=development xvfb-run -a electron . --no-sandbox\" \"npm run dev:vite\"",
     "dev:vite": "vite",
     "build": "npm run build:electron && npm run build:renderer && electron-builder",
     "build:renderer": "vite build",
